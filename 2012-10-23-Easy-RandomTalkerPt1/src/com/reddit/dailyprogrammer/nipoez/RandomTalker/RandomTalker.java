@@ -56,7 +56,8 @@ public class RandomTalker {
 	/**
 	 * File to process
 	 */
-	private static final String FILE_NAME = "dailyprogrammer-desc.txt";
+	//private static final String FILE_NAME = "dailyprogrammer-desc.txt";
+	private static final String FILE_NAME = "Metamorphosis.txt";
 	/**
 	 * Punctuation characters that are delimiters and also tokens
 	 */
