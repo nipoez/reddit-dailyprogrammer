@@ -1,0 +1,23 @@
+Welcome to dailyprogrammer! The focus of this subreddit is to provide daily challenges to keep your mind and fingers busy between projects.
+
+    Each post will be prefaced by brackets denoting the difficulty of the challenge. The difficulty levels are [easy], [intermediate], and [difficult].
+
+    Anything prefaced by four spaces will be automatically hidden
+
+    If you want flair next to your name, either post in this thread or send a message to the moderators. See the thread for details.
+
+    If you have challenge suggestions, submit it in /r/dailyprogrammer_ideas !
+
+    Please preface any code with four spaces, it makes it easier for everyone to read, and it auto hides
+
+    try to challenge yourself with creative solutions or a new language, our challenges seem simple because we're trying to encourage experimentation!
+
+    Any language can be used to complete the challenges, unless otherwise specified.
+
+    if you're looking for harder challenges, head on over to /r/programmingchallenges
+
+    Novelty accounts are not entertained and will be banned if any. This is a strict discussion oriented sub.
+
+    Please follow the reddiquette
+
+    Remember, don't be afraid to ask for help!
