@@ -56,7 +56,7 @@ public class RandomTalker {
 	/**
 	 * File to process
 	 */
-	//private static final String FILE_NAME = "dailyprogrammer-desc.txt";
+	// private static final String FILE_NAME = "dailyprogrammer-desc.txt";
 	private static final String FILE_NAME = "Metamorphosis.txt";
 	/**
 	 * Punctuation characters that are delimiters and also tokens
@@ -68,11 +68,41 @@ public class RandomTalker {
 	 */
 	public static void main(String[] args) {
 		// Get all tokens with their occurrence count
-		List<RandomTalkerToken> tokens = parseFile(WORKING_DIR + "\\" + FILES_DIR + "\\" + FILE_NAME);
+		List<RandomTalkerToken> tokens = parseFile(WORKING_DIR + "\\"
+				+ FILES_DIR + "\\" + FILE_NAME);
 		// Sort the tokens, highest occurring items first
-		Collections.sort(tokens);
+		Collections.sort(tokens, Collections.reverseOrder());
 		// Dump the tokens
-		System.out.println(tokens);
+		printTokens(tokens, 10);
+	}
+
+	private static void printTokens(List<RandomTalkerToken> tokens,
+			int maxTokens) {
+		int stop = maxTokens;
+		int maxTokenLen = 1;
+		String tokenFormat = null;
+		// If the requested max is greater than the available tokens,
+		// print all tokens
+		if (tokens.size() < stop) {
+			stop = tokens.size();
+		}
+
+		// Determine maximum token length, for padding purposes
+		for (int i = 0; i < stop; ++i) {
+			if (tokens.get(i).getToken().length() > maxTokenLen) {
+				maxTokenLen = tokens.get(i).getToken().length();
+			}
+		}
+		// Set the token format string for padding
+		tokenFormat = "%1$-" + maxTokenLen + "s";
+
+		// Print the requested number of tokens, 1 per line
+		//  Right-pad the token using String.format
+		for (int i = 0; i < stop; ++i) {
+			System.out.println(String.format(tokenFormat, tokens.get(i)
+					.getToken())
+					+ " : " + tokens.get(i).getCount());
+		}
 	}
 
 	private static List<RandomTalkerToken> parseFile(String fullPath) {
@@ -82,27 +112,27 @@ public class RandomTalker {
 		RandomTalkerToken rttoken = null;
 		try {
 			// Use Scanner for a first pass of tokenization,
-			//  based on whitespace
+			// based on whitespace
 			Scanner tokenize = new Scanner(new File(fullPath));
 			while (tokenize.hasNext()) {
 				// Use StringTokenizer for a second pass of tokenization,
-				//  treating certain punctuation characters as both
-				//  delimiters and tokens
+				// treating certain punctuation characters as both
+				// delimiters and tokens
 				tokenizePuncuation = new StringTokenizer(tokenize.next(),
 						PUNCTUATION_DELIMS, true);
 				while (tokenizePuncuation.hasMoreTokens()) {
 					token = tokenizePuncuation.nextToken();
 					// Within the second pass tokenization,
-					//  only process non-empty tokens
+					// only process non-empty tokens
 					if (token.length() > 0) {
 						rttoken = new RandomTalkerToken(token, 1);
 						if (tokens.contains(rttoken)) {
 							// This token has been seen before,
-							//  increment the occurrence count
+							// increment the occurrence count
 							tokens.get(tokens.indexOf(rttoken)).increment();
 						} else {
 							// This is a new token,
-							//  start tracking it
+							// start tracking it
 							tokens.add(rttoken);
 						}
 					}

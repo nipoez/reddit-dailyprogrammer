@@ -32,17 +32,14 @@ public class RandomTalkerToken implements Comparable<RandomTalkerToken> {
 
 	/**
 	 * <p>
-	 * Comparisons based on {@link RandomTalkerToken#count}, with order
-	 * reversed.
+	 * Comparisons based on {@link RandomTalkerToken#count}.
 	 * 
 	 * <p>
 	 * Note: @link {@link Integer#compare(int, int)} requires Java 7
 	 */
 	@Override
 	public int compareTo(RandomTalkerToken randomTalkerToken) {
-		return -1
-				* Integer
-						.compare(this.getCount(), randomTalkerToken.getCount());
+		return Integer.compare(this.getCount(), randomTalkerToken.getCount());
 	}
 
 	/**
