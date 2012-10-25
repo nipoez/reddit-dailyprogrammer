@@ -94,7 +94,7 @@ public class RandomTalker {
 			}
 		}
 		// Set the token format string for padding
-		tokenFormat = "%1$-" + maxTokenLen + "s";
+		tokenFormat = "    %1$-" + maxTokenLen + "s";
 
 		// Print the requested number of tokens, 1 per line
 		//  Right-pad the token using String.format
