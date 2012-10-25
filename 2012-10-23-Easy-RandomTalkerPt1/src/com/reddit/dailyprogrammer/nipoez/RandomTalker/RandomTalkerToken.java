@@ -94,7 +94,7 @@ public class RandomTalkerToken implements Comparable<RandomTalkerToken> {
 		if (token == null) {
 			this.token = "";
 		} else {
-			this.token = token;
+			this.token = token.toLowerCase();
 		}
 	}
 
