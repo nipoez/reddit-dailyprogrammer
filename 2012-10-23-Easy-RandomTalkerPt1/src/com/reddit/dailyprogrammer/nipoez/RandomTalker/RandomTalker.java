@@ -3,14 +3,12 @@
  */
 package com.reddit.dailyprogrammer.nipoez.RandomTalker;
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
+import java.util.StringTokenizer;
 
 /**
  * <p>
@@ -47,31 +45,74 @@ import java.util.Scanner;
  */
 public class RandomTalker {
 
+	/**
+	 * Executable's current working directory
+	 */
 	private static final String WORKING_DIR = System.getProperty("user.dir");
+	/**
+	 * Directory containing parseable text files
+	 */
 	private static final String FILES_DIR = "files";
+	/**
+	 * File to process
+	 */
 	private static final String FILE_NAME = "dailyprogrammer-desc.txt";
+	/**
+	 * Punctuation characters that are delimiters and also tokens
+	 */
+	private static final String PUNCTUATION_DELIMS = "\".,:;!?()[]{}";
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		parseFile( WORKING_DIR + "\\" + FILES_DIR + "\\"
-				+ FILE_NAME);
+		// Get all tokens with their occurrence count
+		List<RandomTalkerToken> tokens = parseFile(WORKING_DIR + "\\" + FILES_DIR + "\\" + FILE_NAME);
+		// Sort the tokens, highest occurring items first
+		Collections.sort(tokens);
+		// Dump the tokens
+		System.out.println(tokens);
 	}
 
-	private static void parseFile(String fullPath) {
-		List<String> tokens = new ArrayList<String>();
-		try {			
-			Scanner tokenize = new Scanner ( new File (fullPath) );
+	private static List<RandomTalkerToken> parseFile(String fullPath) {
+		List<RandomTalkerToken> tokens = new ArrayList<RandomTalkerToken>();
+		StringTokenizer tokenizePuncuation = null;
+		String token = null;
+		RandomTalkerToken rttoken = null;
+		try {
+			// Use Scanner for a first pass of tokenization,
+			//  based on whitespace
+			Scanner tokenize = new Scanner(new File(fullPath));
 			while (tokenize.hasNext()) {
-			    tokens.add(tokenize.next());
+				// Use StringTokenizer for a second pass of tokenization,
+				//  treating certain punctuation characters as both
+				//  delimiters and tokens
+				tokenizePuncuation = new StringTokenizer(tokenize.next(),
+						PUNCTUATION_DELIMS, true);
+				while (tokenizePuncuation.hasMoreTokens()) {
+					token = tokenizePuncuation.nextToken();
+					// Within the second pass tokenization,
+					//  only process non-empty tokens
+					if (token.length() > 0) {
+						rttoken = new RandomTalkerToken(token, 1);
+						if (tokens.contains(rttoken)) {
+							// This token has been seen before,
+							//  increment the occurrence count
+							tokens.get(tokens.indexOf(rttoken)).increment();
+						} else {
+							// This is a new token,
+							//  start tracking it
+							tokens.add(rttoken);
+						}
+					}
+				}
 			}
+			tokenize.close();
 
-		} catch (Exception e) {// Catch exception if any
+		} catch (Exception e) {// Poor practice exception handling
 			System.err.println("Error: " + e.getMessage());
 		}
-		
-		System.out.println(tokens);
 
+		return tokens;
 	}
 }
