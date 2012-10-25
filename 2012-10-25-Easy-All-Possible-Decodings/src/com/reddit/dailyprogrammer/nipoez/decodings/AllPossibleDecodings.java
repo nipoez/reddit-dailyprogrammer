@@ -40,23 +40,12 @@ public class AllPossibleDecodings {
 
 	public static void main(String[] args) {
 
-		String input = "120310";
-		StringBuilder possibleOutput = null;
-		List<List<Integer>> possibleDecodings = getPossibleDecodings(input);
+		String input = "123";
+		List<StringBuilder> possibleDecodings = getPossibleDecodings(input);
 
-		for (List<Integer> aPossibleDecoding : possibleDecodings) {
-			possibleOutput = new StringBuilder();
-			for (Integer character : aPossibleDecoding) {
-				// Subtract 1 from the output character to
-				// convert to 0-based index
-				// Add that index to the character 'a'
-				//
-				// Ex, output int "1" is index "0", added to "a" is "a"
-				// Ex, output int "2" is index "1", added to "a" is "b"
-				possibleOutput.append((char) (character.intValue() - 1 + 'a'));
-			}
-			System.out.println(aPossibleDecoding);
-			System.out.println(possibleOutput);
+		for (StringBuilder aPossibleDecoding : possibleDecodings) {
+			// Prepend 4 spaces for lazy copy/pasting
+			System.out.println("   " + aPossibleDecoding);
 		}
 	}
 
@@ -68,10 +57,10 @@ public class AllPossibleDecodings {
 	 *            Must be all integers; other content will fail
 	 * @return All possible character-integer decodings
 	 */
-	public static List<List<Integer>> getPossibleDecodings(String input) {
-		List<List<Integer>> possibleDecodings = new ArrayList<List<Integer>>();
-		List<List<Integer>> recursedPossibleDecodings = null;
-		List<Integer> aPossibleDecoding = null;
+	public static List<StringBuilder> getPossibleDecodings(String input) {
+		List<StringBuilder> possibleDecodings = new ArrayList<StringBuilder>();
+		List<StringBuilder> recursedPossibleDecodings = null;
+		StringBuilder aPossibleDecoding = null;
 		Integer anInt = null;
 
 		if (input == null || input.length() == 0 || input.equals("0")) {
@@ -80,9 +69,9 @@ public class AllPossibleDecodings {
 			return possibleDecodings;
 		} else if (input.length() == 1) {
 			// Just 1 character, only 1 possibility.
-			aPossibleDecoding = new ArrayList<Integer>();
+			aPossibleDecoding = new StringBuilder();
 			anInt = Integer.parseInt(input);
-			aPossibleDecoding.add(anInt);
+			aPossibleDecoding.append(intToChar(anInt));
 			possibleDecodings.add(aPossibleDecoding);
 		} else {
 			// Two or more characters allow for 2 possible decodings
@@ -96,8 +85,8 @@ public class AllPossibleDecodings {
 				recursedPossibleDecodings = getPossibleDecodings(input
 						.substring(1, input.length()));
 				// For every recursive possibility, prepend this character
-				for (List<Integer> tmpPossibleDecoding : recursedPossibleDecodings) {
-					tmpPossibleDecoding.add(0, anInt);
+				for (StringBuilder tmpPossibleDecoding : recursedPossibleDecodings) {
+					tmpPossibleDecoding.insert(0, intToChar(anInt));
 					possibleDecodings.add(tmpPossibleDecoding);
 				}
 			}
@@ -112,21 +101,32 @@ public class AllPossibleDecodings {
 				if (!recursedPossibleDecodings.isEmpty()) {
 					// Recursion found possibilities
 					// For every recursive possibility, prepend this character
-					for (List<Integer> tmpPossibleDecoding : recursedPossibleDecodings) {
-						tmpPossibleDecoding.add(0, anInt);
+					for (StringBuilder tmpPossibleDecoding : recursedPossibleDecodings) {
+						tmpPossibleDecoding.insert(0, intToChar(anInt));
 						possibleDecodings.add(tmpPossibleDecoding);
 					}
 				} else {
 					// Recursion didn't find any new possibilities
 					// Use just this character
-					aPossibleDecoding = new ArrayList<Integer>();
-					aPossibleDecoding.add(anInt);
+					aPossibleDecoding = new StringBuilder();
+					aPossibleDecoding.append(intToChar(anInt));
 					possibleDecodings.add(aPossibleDecoding);
 				}
 			}
 		}
-
 		return possibleDecodings;
+	}
 
+	/**
+	 * <p>
+	 * Convert from a 1-based index to an a-z character value
+	 * 
+	 * <p>
+	 * Only valid for the values 1-26
+	 * 
+	 * @return translation from numbers to letters a -> 1 through z -> 26
+	 */
+	public static char intToChar(Integer character) {
+		return (char) (character.intValue() - 1 + 'a');
 	}
 }
