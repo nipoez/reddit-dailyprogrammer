@@ -34,36 +34,34 @@ public class WordLadder {
 			System.err.println("Error: " + e.getMessage());
 		}
 		System.out.println("------- Validation: puma -------");
-		String ladderStart = "puma";
-		for (String word : allWords) {
-			if (StringUtils.getLevenshteinDistance(ladderStart, word, 1) > 0) {
-				System.out.println(word);
-			}
+		String sampleWord = "puma";
+		List<String> sampleNeighbors = getNeighbors(sampleWord, allWords);
+		for (String neighbor : sampleNeighbors) {
+			System.out.println(neighbor);
 		}
 		System.out.println("------- Easy Challenge: best -------");
-		ladderStart = "best";
-		int bestCount = 0;
-		for (String word : allWords) {
-			if (StringUtils.getLevenshteinDistance(ladderStart, word, 1) > 0) {
-				++bestCount;
-			}
-		}
-		System.out.println("\"best\" has " + bestCount + " neighbors");
+		String challengeWord = "best";
+		List<String> challengeNeighbors = getNeighbors(challengeWord, allWords);
+		System.out.println("\"best\" has " + challengeNeighbors.size()
+				+ " neighbors");
 		System.out.println("------- Bonus 1: 33 words -------");
-		int neighborCount = 0;
-		for (String levenshteinLeft : allWords) {
-			neighborCount = 0;
-			for (String levenshteinRight : allWords) {
-				if (StringUtils.getLevenshteinDistance(levenshteinLeft,
-						levenshteinRight, 1) > 0) {
-					++neighborCount;
-				}
-
-			}
-			if (neighborCount == 33) {
-				System.out.println("\"" + levenshteinLeft + "\" has " + neighborCount
-						+ " neighbors.");
+		int bonusOneCount = 33;
+		for (String bonusOneWord : allWords) {
+			if (getNeighbors(bonusOneWord, allWords).size() == bonusOneCount) {
+				System.out.println("\"" + bonusOneWord + "\" has "
+						+ bonusOneCount + " neighbors.");
 			}
 		}
+	}
+
+	private static List<String> getNeighbors(final String word,
+			final List<String> allWords) {
+		List<String> neighbors = new ArrayList<String>();
+		for (String potentialNeighbor : allWords) {
+			if (StringUtils.getLevenshteinDistance(word, potentialNeighbor, 1) > 0) {
+				neighbors.add(potentialNeighbor);
+			}
+		}
+		return neighbors;
 	}
 }
